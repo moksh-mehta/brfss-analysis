@@ -8,8 +8,7 @@ Risk Factor Surveillance System (BRFSS), implemented in
 > **Status:** work in progress. Done so far: data pipeline, a baseline
 > state-intercepts model (Model 1), and a demographic model with prior and
 > posterior predictive checks (Model 2). Poststratified prevalence estimates are
-> not yet produced. Every result reported here (counts, estimates, diagnostics)
-> is produced by code in this repository.
+> not yet produced.
 
 ## Project layout
 
