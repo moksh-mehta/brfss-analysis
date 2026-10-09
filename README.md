@@ -25,9 +25,6 @@ data/processed/    cleaned/aggregated data (git-ignored)
 
 ## Setup
 
-Requires Python 3.10+. The pinned versions in `requirements.txt` were resolved
-on Python 3.10, which caps JAX at 0.6.x (newer JAX needs Python 3.11+).
-
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
