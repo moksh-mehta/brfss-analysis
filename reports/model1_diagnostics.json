@@ -1,0 +1,12 @@
+{
+  "seed": 20251,
+  "draws": 4000,
+  "divergences": 0,
+  "max_r_hat": 1.0042,
+  "min_ess_bulk": 4825.4911,
+  "min_ess_tail": 2210.7897,
+  "median_leapfrog_steps": 7,
+  "max_leapfrog_steps": 7,
+  "draws_at_depth_limit": 0,
+  "passes_thresholds": true
+}

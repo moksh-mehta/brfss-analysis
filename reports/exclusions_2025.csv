@@ -1,0 +1,7 @@
+step,removed,remaining
+Start: all respondents in file,0,356158
+"Outside 50 states + DC (Guam, Puerto Rico)",5772,350386
+"Diabetes: don't know (7), refused (9), or missing",763,349623
+Age: don't know/refused/missing (_AGEG5YR=14),6487,343136
+Sex: missing,0,343136
+Education: don't know/missing (_EDUCAG=9),1435,341701

@@ -1,0 +1,27 @@
+# Data: raw BRFSS files are never committed; use scripts/download_brfss.py
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+*.XPT
+*.xpt
+*.zip
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Model outputs (large); commit small figures/tables deliberately
+outputs/
+*.nc
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
