@@ -56,8 +56,8 @@ def state_intercepts_noncentered(state_idx, n, n_states, y=None):
 
 # Prior scales for the demographic model, all on the logit scale. "default" reuses
 # Model 1's generic weakly informative scales. "chosen" is what Model 2 is fit with:
-# mu centered at logit(0.12) ~ -2, since adult diabetes prevalence is on the order of
-# 10%; age kept wide because diabetes rises steeply with age; state, education, and
+# mu centered at logit(0.12) ~ -2, a rough prior guess that adult diabetes is low
+# but not rare; age kept wide because diabetes rises steeply with age; state, education, and
 # sex narrower. Both are compared in the prior predictive check (scripts/fit_model2.py).
 PRIOR_SETS = {
     "default": dict(mu_loc=0.0, mu_scale=1.5, sigma_state=1.0, sigma_age=1.0,

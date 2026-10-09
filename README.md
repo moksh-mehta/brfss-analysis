@@ -8,7 +8,8 @@ Risk Factor Surveillance System (BRFSS), implemented in
 > **Status:** work in progress. Done so far: data pipeline, a baseline
 > state-intercepts model (Model 1), and a demographic model with prior and
 > posterior predictive checks (Model 2). Poststratified prevalence estimates are
-> not yet produced. Every number in this README comes from code in this repository.
+> not yet produced. Every result reported here (counts, estimates, diagnostics)
+> is produced by code in this repository.
 
 ## Project layout
 
@@ -142,8 +143,8 @@ Before fitting, data were simulated from the priors alone. With Model 1's
 generic scales applied to every term, the logit-scale effects add up and push
 prevalence toward 0 and 1: the median simulated cell prevalence was 0.50, and
 16% of simulated cells were above 0.90, which is not plausible for diabetes.
-The chosen priors center `mu` near logit(0.12), since adult diabetes prevalence
-is on the order of 10%, and narrow the state, education, and sex scales. Age
+The chosen priors center `mu` near logit(0.12), a rough prior guess that
+adult diabetes prevalence is low but not rare, and narrow the state, education, and sex scales. Age
 stays wide because diabetes rises steeply with age. Under the chosen priors,
 the simulated cell prevalence has median 0.12 and 90% interval 0.01-0.64, with
 0.7% of cells above 0.90. The observed overall sample prevalence (0.146) falls
