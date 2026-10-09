@@ -5,16 +5,19 @@ State-level prevalence of diagnosed diabetes in the US, estimated with
 Risk Factor Surveillance System (BRFSS), implemented in
 [NumPyro](https://num.pyro.ai/) (JAX).
 
-> **Status:** work in progress. No results are reported yet. Every number that
-> appears in this README will be produced by code in this repository.
+> **Status:** work in progress. Done so far: data pipeline and a baseline
+> state-intercepts model (Model 1). Poststratified prevalence estimates are not
+> yet produced. Every number in this README comes from code in this repository.
 
 ## Project layout
 
 ```
-src/brfss_mrp/     library code (data cleaning, models, poststratification)
-scripts/           command-line entry points (data download)
-notebooks/         exploratory analysis and figures
+src/brfss_mrp/     library code (data cleaning, models, NUTS fitting)
+scripts/           command-line entry points (download, build cells, fit models)
+notebooks/         exploratory analysis (empty so far)
 tests/             pytest suite
+reports/           small derived tables and figures cited in this README (committed)
+outputs/           fitted models, e.g. ArviZ .nc files (git-ignored)
 data/raw/          downloaded BRFSS files (git-ignored, never committed)
 data/processed/    cleaned/aggregated data (git-ignored)
 ```
