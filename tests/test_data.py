@@ -9,6 +9,7 @@ ROWS = [
     (1, 2, 2, 2, 2),       # gestational only                     -> kept, y=0
     (1, 4, 3, 2, 2),       # pre-diabetes, age 30-34 -> 25-34     -> kept, y=0
     (1, 3, 13, 1, 1),      # no, 80+ -> 65+                       -> kept, y=0
+    (1, 3, 8, 1, 1),       # no, 55-59 -> 45-64                   -> kept, y=0
     (72, 1, 5, 1, 2),      # Puerto Rico                          -> excluded
     (1, 7, 5, 1, 2),       # diabetes don't know                  -> excluded
     (1, 9, 5, 1, 2),       # diabetes refused                     -> excluded
@@ -27,15 +28,15 @@ def cleaned():
 
 def test_outcome_coding(cleaned):
     df, _ = cleaned
-    assert len(df) == 5
-    assert df["diabetes"].tolist() == [1, 0, 0, 0, 1]
+    assert len(df) == 6
+    assert df["diabetes"].tolist() == [1, 0, 0, 0, 0, 1]
 
 
 def test_recodes(cleaned):
     df, _ = cleaned
-    assert df["age"].tolist() == [0, 1, 1, 5, 1]
-    assert df["sex"].tolist() == [0, 1, 1, 0, 1]
-    assert df["educ"].tolist() == [3, 1, 1, 0, 1]
+    assert df["age"].tolist() == [0, 1, 1, 4, 3, 1]
+    assert df["sex"].tolist() == [0, 1, 1, 0, 0, 1]
+    assert df["educ"].tolist() == [3, 1, 1, 0, 0, 1]
 
 
 def test_exclusion_log_accounts_for_every_row(cleaned):

@@ -49,10 +49,11 @@ STATES: dict[int, tuple[str, str]] = {
 DIABETES_CODING = {1: 1, 2: 0, 3: 0, 4: 0}
 
 # _AGEG5YR: 1 = 18-24, 2 = 25-29, ..., 13 = 80+, 14 = don't know/refused/missing.
-# Collapsed to six groups.
-AGE_LABELS = ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"]
-AGE_CODING = {1: 0, 2: 1, 3: 1, 4: 2, 5: 2, 6: 3, 7: 3, 8: 4, 9: 4,
-              10: 5, 11: 5, 12: 5, 13: 5}
+# Collapsed to the five age groups of ACS table B15001 (verified against the
+# Census API variable list for ACS 2024 1-year), which is the poststratification frame.
+AGE_LABELS = ["18-24", "25-34", "35-44", "45-64", "65+"]
+AGE_CODING = {1: 0, 2: 1, 3: 1, 4: 2, 5: 2, 6: 3, 7: 3, 8: 3, 9: 3,
+              10: 4, 11: 4, 12: 4, 13: 4}
 
 # _SEX: 1 Male, 2 Female (no missing values in 2025).
 SEX_LABELS = ["Male", "Female"]

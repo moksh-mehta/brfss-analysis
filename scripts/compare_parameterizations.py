@@ -22,7 +22,7 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
 from brfss_mrp.data import YEAR  # noqa: E402
-from brfss_mrp.fit import load_cells, passes, run_nuts  # noqa: E402
+from brfss_mrp.fit import load_cells, passes, run_nuts, state_data  # noqa: E402
 from brfss_mrp.models import state_intercepts_centered, state_intercepts_noncentered  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,7 +35,10 @@ def main() -> None:
     rows = []
     for name, model in [("centered", state_intercepts_centered),
                         ("non-centered", state_intercepts_noncentered)]:
-        fit = run_nuts(model, cells, states, seed=SEED)
+        fit = run_nuts(model, state_data(cells, states), cells["y"].to_numpy(), seed=SEED,
+                       var_names=["mu", "sigma", "alpha"],
+                       coords={"state": states["state_abbr"].tolist()},
+                       dims={"alpha": ["state"], "z": ["state"]})
         row = {"parameterization": name, **fit.diagnostics,
                "passes_thresholds": passes(fit.diagnostics)}
         for p in ["mu", "sigma"]:

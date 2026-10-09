@@ -1,0 +1,14 @@
+{
+  "seed": 20252,
+  "priors": "chosen",
+  "dense_mass": false,
+  "draws": 4000,
+  "divergences": 0,
+  "max_r_hat": 1.0128,
+  "min_ess_bulk": 294.9468,
+  "min_ess_tail": 646.5,
+  "median_leapfrog_steps": 511,
+  "max_leapfrog_steps": 1023,
+  "draws_at_depth_limit": 11,
+  "passes_thresholds": false
+}

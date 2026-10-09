@@ -27,7 +27,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 from brfss_mrp.data import YEAR  # noqa: E402
-from brfss_mrp.fit import load_cells, passes, run_nuts  # noqa: E402
+from brfss_mrp.fit import load_cells, passes, run_nuts, state_data  # noqa: E402
 from brfss_mrp.models import state_intercepts_centered  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,7 +36,9 @@ SEED = 20251
 
 def main() -> None:
     cells, states = load_cells(ROOT / "data" / "processed", YEAR)
-    fit = run_nuts(state_intercepts_centered, cells, states, seed=SEED)
+    fit = run_nuts(state_intercepts_centered, state_data(cells, states), cells["y"].to_numpy(),
+                   seed=SEED, var_names=["mu", "sigma", "alpha"],
+                   coords={"state": states["state_abbr"].tolist()}, dims={"alpha": ["state"]})
 
     (ROOT / "outputs").mkdir(exist_ok=True)
     fit.idata.to_netcdf(ROOT / "outputs" / "model1.nc")

@@ -28,23 +28,38 @@ def load_cells(processed_dir: Path, year: int) -> tuple[pd.DataFrame, pd.DataFra
     return cells, states
 
 
-def run_nuts(model, cells: pd.DataFrame, states: pd.DataFrame, *, seed: int,
+def state_data(cells: pd.DataFrame, states: pd.DataFrame) -> dict:
+    """Model inputs for the state-intercepts models (without y)."""
+    return dict(state_idx=jnp.asarray(cells["state_idx"].to_numpy()),
+                n=jnp.asarray(cells["n"].to_numpy()),
+                n_states=len(states))
+
+
+def demographic_data(cells: pd.DataFrame, states: pd.DataFrame, n_age: int, n_educ: int) -> dict:
+    """Model inputs for the demographic model (without y). Sex is coded -0.5 / +0.5."""
+    return dict(state_idx=jnp.asarray(cells["state_idx"].to_numpy()),
+                age_idx=jnp.asarray(cells["age"].to_numpy()),
+                educ_idx=jnp.asarray(cells["educ"].to_numpy()),
+                sex=jnp.asarray(cells["sex"].to_numpy() - 0.5),
+                n=jnp.asarray(cells["n"].to_numpy()),
+                n_states=len(states), n_age=n_age, n_educ=n_educ)
+
+
+def run_nuts(model, data: dict, y, *, seed: int, var_names: list[str],
+             coords: dict | None = None, dims: dict | None = None,
              num_chains: int = 4, num_warmup: int = 1000, num_samples: int = 1000,
-             target_accept_prob: float = 0.8) -> FitResult:
-    mcmc = MCMC(NUTS(model, target_accept_prob=target_accept_prob), num_warmup=num_warmup,
-                num_samples=num_samples, num_chains=num_chains, chain_method="parallel",
-                progress_bar=False)
-    mcmc.run(jax.random.PRNGKey(seed),
-             state_idx=jnp.asarray(cells["state_idx"].to_numpy()),
-             n=jnp.asarray(cells["n"].to_numpy()),
-             n_states=len(states),
-             y=jnp.asarray(cells["y"].to_numpy()),
+             target_accept_prob: float = 0.8, dense_mass: bool = False,
+             model_kwargs: dict | None = None) -> FitResult:
+    mcmc = MCMC(NUTS(model, target_accept_prob=target_accept_prob, dense_mass=dense_mass),
+                num_warmup=num_warmup, num_samples=num_samples, num_chains=num_chains,
+                chain_method="parallel", progress_bar=False)
+    mcmc.run(jax.random.PRNGKey(seed), **data, y=jnp.asarray(y), **(model_kwargs or {}),
              extra_fields=("diverging", "num_steps"))
 
-    dims = {"alpha": ["state"], "z": ["state"]}
-    idata = az.from_numpyro(mcmc, coords={"state": states["state_abbr"].tolist()},
-                            dims={k: v for k, v in dims.items() if k in mcmc.get_samples()})
-    summary = az.summary(idata, var_names=["mu", "sigma", "alpha"], round_to=4)
+    samples = mcmc.get_samples()
+    dims = {k: v for k, v in (dims or {}).items() if k in samples}
+    idata = az.from_numpyro(mcmc, coords=coords, dims=dims)
+    summary = az.summary(idata, var_names=var_names, round_to=4)
 
     # Leapfrog steps per draw; 2**MAX_TREE_DEPTH - 1 means NUTS hit the depth limit.
     num_steps = mcmc.get_extra_fields()["num_steps"]

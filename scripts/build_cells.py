@@ -14,7 +14,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from brfss_mrp.data import YEAR, aggregate_cells, clean, load_raw, state_table
+from brfss_mrp.data import AGE_LABELS, EDUC_LABELS, SEX_LABELS, YEAR, aggregate_cells, clean, load_raw, state_table
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -40,11 +40,12 @@ def main() -> None:
     print("Exclusions (applied in order):")
     print(log.to_string(index=False))
     missing = states.loc[~states["in_sample"], "state_name"].tolist()
-    n_possible = len(states) * 6 * 2 * 4
+    shape = (len(states), len(AGE_LABELS), len(SEX_LABELS), len(EDUC_LABELS))
+    n_possible = shape[0] * shape[1] * shape[2] * shape[3]
     print(f"\nGeographies with data: {int(states['in_sample'].sum())} of {len(states)}; no data: {missing}")
     print(f"Respondents: {len(clean_df):,}; diagnosed diabetes: {int(clean_df['diabetes'].sum()):,} "
           f"(unweighted {clean_df['diabetes'].mean():.4f})")
-    print(f"Non-empty cells: {len(cells):,} of {n_possible:,} possible (51 x 6 x 2 x 4)")
+    print(f"Non-empty cells: {len(cells):,} of {n_possible:,} possible ({' x '.join(map(str, shape))})")
     print(f"Respondents per non-empty cell: min {cells['n'].min()}, median {cells['n'].median():.0f}, "
           f"max {cells['n'].max()}")
     assert cells["n"].sum() == len(clean_df) and cells["y"].sum() == clean_df["diabetes"].sum()
