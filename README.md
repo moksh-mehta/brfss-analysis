@@ -122,3 +122,8 @@ and every `z_s` to move together: their posterior correlation has a median of
 -0.55 (minimum -0.74) across observed states, and NUTS mixes slowly along that
 ridge. Non-centering pays off when groups have little data. That is likely to
 be true for the finer demographic interactions in later models.
+
+## License
+
+Code: MIT (see `LICENSE`). BRFSS data is published by the CDC and is not
+included in this repository.
